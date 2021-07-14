@@ -69,6 +69,12 @@ RegisterCommand('wl', (source, args) => {
                     });
                     return;
                 }
+
+                needUpdate = true;
+                data.employment.push({
+                    business: 'city', //not sure if we only allow city whitelist for now
+                    role: jobName
+                });
             }
         });
     });
