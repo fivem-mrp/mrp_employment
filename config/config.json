@@ -1,0 +1,8 @@
+{
+    "locale": {
+        "en": {
+            "errorWLChar": "Unable to find character for given state ID",
+            "errorAlreadyHasJob": "Player with state ID [${stateId}] already has a job [${jobName}]"
+        }
+    }
+}

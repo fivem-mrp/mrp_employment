@@ -11,6 +11,7 @@ dependencies {
 
 shared_scripts {
     '@mrp_core/shared/debug.js',
+    'config/config.json',
 }
 
 client_scripts {
