@@ -20,15 +20,7 @@ function findEmployement(data, business, role) {
     return employment;
 }
 
-RegisterCommand('wl', (source, args) => {
-    //whitelist command
-    let stateId = parseInt(args[0]);
-    let jobName = args[1];
-    if (!stateId)
-        return;
-    if (!jobName)
-        return;
-
+function addEmployment(source, stateId, businessId, jobName) {
     MRP_SERVER.read('character', {
         stateId: stateId
     }, (char) => {
@@ -52,13 +44,13 @@ RegisterCommand('wl', (source, args) => {
                 data = {
                     char: char._id,
                     employment: [{
-                        business: 'city', //not sure if we only allow city whitelist for now
+                        business: businessId,
                         role: jobName
                     }]
                 };
                 needUpdate = true;
             } else {
-                let job = findEmployement(data, 'city', jobName);
+                let job = findEmployement(data, businessId, jobName);
                 if (job) {
                     console.log(`Player with state ID [${stateId}] already has a job [${jobName}]`);
                     emitNet('chat:addMessage', source, {
@@ -72,7 +64,7 @@ RegisterCommand('wl', (source, args) => {
 
                 needUpdate = true;
                 data.employment.push({
-                    business: 'city', //not sure if we only allow city whitelist for now
+                    business: businessId,
                     role: jobName
                 });
             }
@@ -100,4 +92,16 @@ RegisterCommand('wl', (source, args) => {
             }
         });
     });
+}
+
+RegisterCommand('wl', (source, args) => {
+    //whitelist command
+    let stateId = parseInt(args[0]);
+    let jobName = args[1];
+    if (!stateId)
+        return;
+    if (!jobName)
+        return;
+
+    addEmployment(source, stateId, 'city', jobName); //not sure if we only allow city whitelist for now
 }, true);
