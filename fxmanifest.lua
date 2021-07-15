@@ -9,9 +9,12 @@ dependencies {
     "mrp_core"
 }
 
+files {
+    'config/config.json',
+}
+
 shared_scripts {
     '@mrp_core/shared/debug.js',
-    'config/config.json',
 }
 
 client_scripts {

@@ -64,7 +64,7 @@ RegisterCommand('wl', (source, args) => {
                     emitNet('chat:addMessage', source, {
                         template: '<div class="chat-message nonemergency">{0}</div>',
                         args: [
-                            locale.errorAlreadyHasJob.replace('${stateId}', config.stateId).replace('${jobName}', config.jobName)
+                            locale.errorAlreadyHasJob.replace('${stateId}', stateId).replace('${jobName}', jobName)
                         ]
                     });
                     return;
@@ -74,6 +74,28 @@ RegisterCommand('wl', (source, args) => {
                 data.employment.push({
                     business: 'city', //not sure if we only allow city whitelist for now
                     role: jobName
+                });
+            }
+
+            if (needUpdate) {
+                let query = {};
+
+                if (data._id)
+                    query._id = data._id;
+
+                MRP_SERVER.update('employment', data, query, null, (result) => {
+                    if (result.modifiedCount > 0) {
+                        console.log(`Updated employment for state ID [${stateId}] with job name [${jobName}]`);
+                    } else {
+                        console.log(`Added employment for state ID [${stateId}] with job name [${jobName}]`);
+                    }
+
+                    emitNet('chat:addMessage', source, {
+                        template: '<div class="chat-message nonemergency">{0}</div>',
+                        args: [
+                            locale.wlSuccess.replace('${stateId}', stateId).replace('${jobName}', jobName)
+                        ]
+                    });
                 });
             }
         });
