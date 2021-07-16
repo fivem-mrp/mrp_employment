@@ -116,6 +116,16 @@ MRP_SERVER.employment = {
                                 locale.wlSuccess.replace('${stateId}', stateId).replace('${jobName}', jobName)
                             ]
                         });
+
+                        for (let src in MRP_SERVER.playerSpawnedCharacters) {
+                            let spawnedChar = MRP_SERVER.playerSpawnedCharacters[src];
+                            if (MRP_SERVER.isObjectIDEqual(spawnedChar._id, char._id)) {
+                                if (result.upsertedId)
+                                    data._id = result.upsertedId;
+
+                                emitNet('mrp:employment:client:setEmployment', src, data);
+                            }
+                        }
                     });
                 }
             });

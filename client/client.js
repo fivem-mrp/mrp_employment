@@ -92,6 +92,10 @@ onNet('mrp:spawn', (char, spawn) => {
     });
 });
 
+onNet('mrp:employment:client:setEmployment', (employment) => {
+    currentEmployment = employment;
+});
+
 on('mrp:employment:getSharedObject', (cb) => {
     cb(MRP_CLIENT);
 });
