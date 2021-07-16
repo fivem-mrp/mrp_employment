@@ -332,7 +332,9 @@ onNet('mrp:employment:server:getEmployment', (source, charId, uuid) => {
     }];
 
     MRP_SERVER.aggregate('employment', agg, (result) => {
-        emitNet('mrp:employment:server:getEmployment:response', source, result, uuid);
+        if (result && result.length > 0) {
+            emitNet('mrp:employment:server:getEmployment:response', source, result[0], uuid);
+        }
     });
 });
 
