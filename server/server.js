@@ -31,8 +31,13 @@ MRP_SERVER.employment = {
     findEmployement(data, business, role) {
         let employment;
         for (let emp of data.employment) {
-            if (emp.business == business && emp.role == role)
-                employment = emp;
+            if (typeof business == 'string') {
+                if (emp.business == business && emp.role == role)
+                    employment = emp;
+            } else {
+                if (MRP_SERVER.isObjectIDEqual(emp.business, business) && emp.role == role)
+                    employment = emp;
+            }
         }
         return employment;
     },
@@ -279,6 +284,18 @@ onNet('mrp:employment:server:getEmployment', (source, charId, uuid) => {
     }, (result) => {
         emitNet('mrp:employment:server:getEmployment:response', source, result, uuid);
     });
+});
+
+/**
+ * Add employment for a character
+ * @event MRP_SERVER.employment#mrp:employment:server:addEmployment
+ * @type {object}
+ * @property {int} stateId              stateId of the character
+ * @property {ObjectID} businessId      id of the business
+ * @property {string} jobName           role/job name
+ */
+onNet('mrp:employment:server:addEmployment', (source, stateId, businessId, jobName) => {
+    MRP_SERVER.employment.addEmployment(source, stateId, businessId, jobName);
 });
 
 /**
