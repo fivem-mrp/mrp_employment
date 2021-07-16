@@ -93,6 +93,21 @@ MRP_CLIENT.employment = {
     }
 };
 
+on('onClientResourceStart', (name) => {
+    if (name != GetCurrentResourceName())
+        return;
+
+    let char = MRP_CLIENT.GetPlayerData();
+    if (char) {
+        //try to get employment
+        MRP_CLIENT.TriggerServerCallback('mrp:employment:server:getEmployment', char._id, (employment) => {
+            if (employment) {
+                currentEmployment = employment;
+            }
+        });
+    }
+});
+
 /**
  * init employment on spawn
  * @listens MRP_CLIENT#mrp:spawn
