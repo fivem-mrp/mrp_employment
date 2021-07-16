@@ -36,7 +36,10 @@ function sendEmployment(src, data) {
     }];
 
     MRP_SERVER.aggregate('employment', agg, (employment) => {
-        emitNet('mrp:employment:client:setEmployment', src, employment);
+        if (employment && employment.length > 0) {
+            emitNet('mrp:employment:client:setEmployment', src, employment[0]);
+        }
+
     });
 }
 
