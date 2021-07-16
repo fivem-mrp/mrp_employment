@@ -93,6 +93,7 @@ onNet('mrp:spawn', (char, spawn) => {
 });
 
 onNet('mrp:employment:client:setEmployment', (employment) => {
+    console.log(`Update employment ${JSON.stringify(employment)}`);
     currentEmployment = employment;
 });
 
