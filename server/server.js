@@ -11,6 +11,35 @@ while (MRP_SERVER == null) {
     console.log('Waiting for shared object....');
 }
 
+function sendEmployment(src, data) {
+    const agg = [{
+        '$match': {
+            '_id': data._id
+        }
+    }, {
+        '$lookup': {
+            'from': 'business',
+            'let': {
+                'eid': '$employment.business'
+            },
+            'pipeline': [{
+                '$match': {
+                    '$expr': {
+                        '$in': [
+                            '$_id', '$$eid'
+                        ]
+                    }
+                }
+            }],
+            'as': 'businessRefs'
+        }
+    }];
+
+    MRP_SERVER.aggregate('employment', agg, (employment) => {
+        emitNet('mrp:employment:client:setEmployment', src, employment);
+    });
+}
+
 /**
  * need to have module mrp_employment loaded
  * 
@@ -135,7 +164,7 @@ MRP_SERVER.employment = {
                                     ]
                                 });
 
-                                emitNet('mrp:employment:client:setEmployment', src, data);
+                                sendEmployment(src, data);
                             }
                         }
                     });
@@ -238,7 +267,7 @@ MRP_SERVER.employment = {
                                     ]
                                 });
 
-                                emitNet('mrp:employment:client:setEmployment', src, data);
+                                sendEmployment(src, data);
                             }
                         }
                     });
@@ -279,9 +308,30 @@ RegisterCommand('bl', (source, args) => {
  * @property {ID} charId      character ID to get data for
  */
 onNet('mrp:employment:server:getEmployment', (source, charId, uuid) => {
-    MRP_SERVER.read('employment', {
-        char: charId
-    }, (result) => {
+    const agg = [{
+        '$match': {
+            'char': charId
+        }
+    }, {
+        '$lookup': {
+            'from': 'business',
+            'let': {
+                'eid': '$employment.business'
+            },
+            'pipeline': [{
+                '$match': {
+                    '$expr': {
+                        '$in': [
+                            '$_id', '$$eid'
+                        ]
+                    }
+                }
+            }],
+            'as': 'businessRefs'
+        }
+    }];
+
+    MRP_SERVER.aggregate('employment', agg, (result) => {
         emitNet('mrp:employment:server:getEmployment:response', source, result, uuid);
     });
 });
