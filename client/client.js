@@ -81,6 +81,15 @@ MRP_CLIENT.employment = {
             return true;
 
         return false;
+    },
+
+    /**
+     * getEmployment - description    
+     *      
+     * @return {type}  description     
+     */
+    getEmployment() {
+        return currentEmployment;
     }
 };
 
