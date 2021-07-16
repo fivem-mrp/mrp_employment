@@ -76,7 +76,7 @@ MRP_SERVER.employment = {
                         for (let obj of data.employment) {
 
                             let remove = false;
-                            if (typeof business == 'string') {
+                            if (typeof businessId == 'string') {
                                 if (obj.business == businessId && obj.role == jobName)
                                     remove = true;
                             } else {
@@ -87,13 +87,12 @@ MRP_SERVER.employment = {
                             if (remove) {
                                 console.log(`Remove employment for stateId [${stateId}] and business [${data.business}] with role [${obj.role}]`);
                                 data.employment.splice(i, 1);
+                                needUpdate = true;
                                 continue;
                             }
                             i++;
                         }
                     }
-
-                    needUpdate = true;
                 }
 
                 if (needUpdate) {
