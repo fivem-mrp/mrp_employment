@@ -11,7 +11,23 @@ while (MRP_SERVER == null) {
     console.log('Waiting for shared object....');
 }
 
+/**
+ * need to have module mrp_employment loaded
+ * 
+ * @memberof MRP_SERVER
+ * @namespace employment
+ */
 MRP_SERVER.employment = {
+
+    /**    
+     * findEmployement - description
+     * 
+     * @memberof MRP_SERVER.employment
+     * @param  {type} data     description     
+     * @param  {type} business description     
+     * @param  {type} role     description     
+     * @return {type}          description     
+     */
     findEmployement(data, business, role) {
         let employment;
         for (let emp of data.employment) {
@@ -20,6 +36,18 @@ MRP_SERVER.employment = {
         }
         return employment;
     },
+
+
+    /**    
+     * addEmployment - description    
+     * 
+     * @memberof MRP_SERVER.employment     
+     * @param  {type} source     description     
+     * @param  {type} stateId    description     
+     * @param  {type} businessId description     
+     * @param  {type} jobName    description     
+     * @return {type}            description     
+     */
     addEmployment(source, stateId, businessId, jobName) {
         MRP_SERVER.read('character', {
             stateId: stateId
@@ -107,6 +135,13 @@ RegisterCommand('wl', (source, args) => {
     MRP_SERVER.employment.addEmployment(source, stateId, 'city', jobName); //not sure if we only allow city whitelist for now
 }, true);
 
+onNet('mrp:employment:server:getEmployment', (source, charId, uuid) => {
+    MRP_SERVER.read('employment', {
+        char: charId
+    }, (result) => {
+        emitNet('mrp:employment:server:getEmployment:response', source, result, uuid);
+    });
+});
 
 on('mrp:employment:getSharedObject', (cb) => {
     cb(MRP_SERVER);
