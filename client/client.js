@@ -84,6 +84,10 @@ MRP_CLIENT.employment = {
     }
 };
 
+/**
+ * init employment on spawn
+ * @listens MRP_CLIENT#mrp:spawn
+ */
 onNet('mrp:spawn', (char, spawn) => {
     MRP_CLIENT.TriggerServerCallback('mrp:employment:server:getEmployment', char._id, (employment) => {
         if (employment) {
@@ -92,11 +96,23 @@ onNet('mrp:spawn', (char, spawn) => {
     });
 });
 
+/**
+ * Set employment data event
+ * @event MRP_CLIENT.employment#mrp:employment:client:setEmployment
+ * @type {object}
+ * @property {Employment} employment      employment to set
+ */
 onNet('mrp:employment:client:setEmployment', (employment) => {
     console.log(`Update employment ${JSON.stringify(employment)}`);
     currentEmployment = employment;
 });
 
+/**
+ * Get shared object
+ * @event MRP_CLIENT.employment#mrp:employment:getSharedObject
+ * @type {object}
+ * @property {function} callback      function with the shared object as argument
+ */
 on('mrp:employment:getSharedObject', (cb) => {
     cb(MRP_CLIENT);
 });

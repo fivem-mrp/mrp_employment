@@ -40,6 +40,7 @@ MRP_SERVER.employment = {
     /**
      * removeEmployment - description    
      *      
+     * @fires MRP_CLIENT.employment#mrp:employment:client:setEmployment
      * @memberof MRP_SERVER.employment
      * @param  {type} source     description     
      * @param  {type} stateId    description     
@@ -141,6 +142,7 @@ MRP_SERVER.employment = {
     /**    
      * addEmployment - description    
      * 
+     * @fires MRP_CLIENT.employment#mrp:employment:client:setEmployment
      * @memberof MRP_SERVER.employment     
      * @param  {type} source     description     
      * @param  {type} stateId    description     
@@ -265,6 +267,12 @@ RegisterCommand('bl', (source, args) => {
     MRP_SERVER.employment.removeEmployment(source, stateId, 'city', jobName); //not sure if we only allow city whitelist for now
 }, true);
 
+/**
+ * Get employment for a character
+ * @event MRP_SERVER.employment#mrp:employment:server:getEmployment
+ * @type {object}
+ * @property {ID} charId      character ID to get data for
+ */
 onNet('mrp:employment:server:getEmployment', (source, charId, uuid) => {
     MRP_SERVER.read('employment', {
         char: charId
@@ -273,6 +281,12 @@ onNet('mrp:employment:server:getEmployment', (source, charId, uuid) => {
     });
 });
 
+/**
+ * Get shared object
+ * @event MRP_SERVER.employment#mrp:employment:getSharedObject
+ * @type {object}
+ * @property {function} callback      function with the shared object as argument
+ */
 on('mrp:employment:getSharedObject', (cb) => {
     cb(MRP_SERVER);
 });
