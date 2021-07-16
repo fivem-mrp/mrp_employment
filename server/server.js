@@ -210,8 +210,9 @@ MRP_SERVER.employment = {
                             ]
                         });
 
-                        for (let src in MRP_SERVER.playerSpawnedCharacters) {
-                            let spawnedChar = MRP_SERVER.playerSpawnedCharacters[src];
+                        let allChars = MRP_SERVER.getSpawnedCharacters();
+                        for (let src in allChars) {
+                            let spawnedChar = allChars[src];
                             if (MRP_SERVER.isObjectIDEqual(spawnedChar._id, char._id)) {
                                 if (result.upsertedId)
                                     data._id = result.upsertedId;
