@@ -39,7 +39,6 @@ function sendEmployment(src, data) {
         if (employment && employment.length > 0) {
             emitNet('mrp:employment:client:setEmployment', src, employment[0]);
         }
-
     });
 }
 
