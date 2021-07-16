@@ -12,7 +12,7 @@ while (MRP_SERVER == null) {
 }
 
 MRP_SERVER.employment = {
-    findEmployement: (data, business, role) => {
+    findEmployement(data, business, role) {
         let employment;
         for (let emp of data.employment) {
             if (emp.business == business && emp.role == role)
@@ -20,7 +20,7 @@ MRP_SERVER.employment = {
         }
         return employment;
     },
-    addEmployment: (source, stateId, businessId, jobName) => {
+    addEmployment(source, stateId, businessId, jobName) {
         MRP_SERVER.read('character', {
             stateId: stateId
         }, (char) => {
@@ -106,3 +106,8 @@ RegisterCommand('wl', (source, args) => {
 
     MRP_SERVER.employment.addEmployment(source, stateId, 'city', jobName); //not sure if we only allow city whitelist for now
 }, true);
+
+
+on('mrp:employment:getSharedObject', (cb) => {
+    cb(MRP_SERVER);
+});
