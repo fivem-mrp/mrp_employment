@@ -122,6 +122,13 @@ MRP_SERVER.employment = {
                                 if (result.upsertedId)
                                     data._id = result.upsertedId;
 
+                                emitNet('chat:addMessage', src, {
+                                    template: '<div class="chat-message nonemergency">{0}</div>',
+                                    args: [
+                                        locale.roleRemove.replace('${stateId}', stateId).replace('${jobName}', jobName)
+                                    ]
+                                });
+
                                 emitNet('mrp:employment:client:setEmployment', src, data);
                             }
                         }
@@ -216,6 +223,13 @@ MRP_SERVER.employment = {
                             if (MRP_SERVER.isObjectIDEqual(spawnedChar._id, char._id)) {
                                 if (result.upsertedId)
                                     data._id = result.upsertedId;
+
+                                emitNet('chat:addMessage', src, {
+                                    template: '<div class="chat-message nonemergency">{0}</div>',
+                                    args: [
+                                        locale.roleAdded.replace('${stateId}', stateId).replace('${jobName}', jobName)
+                                    ]
+                                });
 
                                 emitNet('mrp:employment:client:setEmployment', src, data);
                             }
