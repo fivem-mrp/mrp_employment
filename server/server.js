@@ -85,7 +85,7 @@ MRP_SERVER.employment = {
                             }
 
                             if (remove) {
-                                console.log(`Remove employment for stateId [${stateId}] and business [${data.business}] with role [${obj.role}]`);
+                                console.log(`Remove employment for stateId [${stateId}] and business [${obj.business}] with role [${obj.role}]`);
                                 data.employment.splice(i, 1);
                                 needUpdate = true;
                                 continue;
