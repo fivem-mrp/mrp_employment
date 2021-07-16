@@ -4,6 +4,7 @@
             "errorWLChar": "Unable to find character for given state ID",
             "errorAlreadyHasJob": "Player with state ID [${stateId}] already has a job [${jobName}]",
             "wlSuccess": "Player with state ID [${stateId}] now has a job [${jobName}]",
+            "blSuccess": "Player with state ID [${stateId}] remove job [${jobName}]",
             "unableToAdd": "Unable to add state ID [${stateId}] to a job [${jobName}]"
         }
     }
