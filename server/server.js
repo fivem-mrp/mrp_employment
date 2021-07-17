@@ -63,10 +63,10 @@ MRP_SERVER.employment = {
         let employment;
         for (let emp of data.employment) {
             if (typeof business == 'string') {
-                if (emp.business == business && emp.role == role)
+                if (emp.business == business && (role == null || emp.role == role))
                     employment = emp;
             } else {
-                if (MRP_SERVER.isObjectIDEqual(emp.business, business) && emp.role == role)
+                if (MRP_SERVER.isObjectIDEqual(emp.business, business) && (role == null || emp.role == role))
                     employment = emp;
             }
         }
@@ -302,6 +302,48 @@ RegisterCommand('bl', (source, args) => {
 
     MRP_SERVER.employment.removeEmployment(source, stateId, 'city', jobName); //not sure if we only allow city whitelist for now
 }, true);
+
+/**
+ * Get employees for a business
+ * @event MRP_SERVER.employment#mrp:employment:server:getEmployees
+ * @type {object}
+ * @property {ID} businessId      business ID for a query
+ */
+onNet('mrp:employment:server:getEmployees', (source, businessId, uuid) => {
+    console.log(`Get employees...`);
+    const agg = [{
+        '$match': {
+            'employment.business': businessId
+        }
+    }, {
+        '$lookup': {
+            'from': 'character',
+            'localField': 'char',
+            'foreignField': '_id',
+            'as': 'char'
+        }
+    }, {
+        '$project': {
+            'employment': 1,
+            'char': {
+                '$arrayElemAt': [
+                    '$char', 0
+                ]
+            }
+        }
+    }];
+
+    MRP_SERVER.aggregate('employment', agg, (result) => {
+        console.log(`Got employees [${result.length}]`);
+        if (result.length > 0) {
+            for (let res of result) {
+                var emp = MRP_SERVER.employment.findEmployement(res, businessId, null);
+                res.employment = emp;
+            }
+        }
+        emitNet('mrp:employment:server:getEmployees:response', source, result, uuid);
+    });
+});
 
 /**
  * Get employment for a character
