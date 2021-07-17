@@ -12,6 +12,12 @@ while (MRP_SERVER == null) {
 }
 
 function sendEmployment(src, data) {
+    if (!data || !data._id) {
+        console.log('No data recieved to get employment for');
+        emitNet('mrp:employment:client:setEmployment', src, null);
+        return;
+    }
+
     const agg = [{
         '$match': {
             '_id': data._id
@@ -138,7 +144,7 @@ MRP_SERVER.employment = {
                     if (data._id)
                         query._id = data._id;
 
-                    MRP_SERVER.update('employment', data, query, null, (result) => {
+                    let postUpdate = function(result) {
                         if (result.modifiedCount > 0) {
                             console.log(`Updated employment for state ID [${stateId}] with job name [${jobName}]`);
                         } else {
@@ -169,6 +175,10 @@ MRP_SERVER.employment = {
                                 sendEmployment(src, data);
                             }
                         }
+                    };
+
+                    MRP_SERVER.update('employment', data, query, null, (result) => {
+                        postUpdate(result);
                     });
                 }
             });
@@ -238,11 +248,8 @@ MRP_SERVER.employment = {
                 if (needUpdate) {
                     let query = {};
 
-                    if (data._id)
-                        query._id = data._id;
-
-                    MRP_SERVER.update('employment', data, query, null, (result) => {
-                        if (result.modifiedCount > 0) {
+                    let postAdd = function(result) {
+                        if (result.modifiedCount && result.modifiedCount > 0) {
                             console.log(`Updated employment for state ID [${stateId}] with job name [${jobName}]`);
                         } else {
                             console.log(`Added employment for state ID [${stateId}] with job name [${jobName}]`);
@@ -261,6 +268,8 @@ MRP_SERVER.employment = {
                             if (MRP_SERVER.isObjectIDEqual(spawnedChar._id, char._id)) {
                                 if (result.upsertedId)
                                     data._id = result.upsertedId;
+                                if (result.insertedId)
+                                    data._id = result.insertedId;
 
                                 emitNet('chat:addMessage', src, {
                                     template: '<div class="chat-message nonemergency">{0}</div>',
@@ -272,7 +281,18 @@ MRP_SERVER.employment = {
                                 sendEmployment(src, data);
                             }
                         }
-                    });
+                    };
+
+                    if (data._id) {
+                        query._id = data._id;
+                        MRP_SERVER.update('employment', data, query, null, (result) => {
+                            postAdd(result);
+                        });
+                    } else {
+                        MRP_SERVER.create('employment', data, (result) => {
+                            postAdd(result);
+                        });
+                    }
                 }
             });
         });
