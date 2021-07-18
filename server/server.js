@@ -415,6 +415,18 @@ onNet('mrp:employment:server:addEmployment', (source, stateId, businessId, jobNa
 });
 
 /**
+ * Remove/Fire employment for a character
+ * @event MRP_SERVER.employment#'mrp:employment:server:removeEmployment
+ * @type {object}
+ * @property {int} stateId              stateId of the character
+ * @property {ObjectID} businessId      id of the business
+ * @property {string} jobName           role/job name
+ */
+onNet('mrp:employment:server:removeEmployment', (source, stateId, businessId, jobName) => {
+    MRP_SERVER.employment.removeEmployment(source, stateId, businessId, jobName);
+});
+
+/**
  * Get shared object
  * @event MRP_SERVER.employment#mrp:employment:getSharedObject
  * @type {object}
