@@ -158,6 +158,8 @@ MRP_SERVER.employment = {
                             ]
                         });
 
+                        emitNet('mrp:employment:server:employmentChanged', source, result);
+
                         let allChars = MRP_SERVER.getSpawnedCharacters();
                         for (let src in allChars) {
                             let spawnedChar = allChars[src];
@@ -261,6 +263,8 @@ MRP_SERVER.employment = {
                                 locale.wlSuccess.replace('${stateId}', stateId).replace('${jobName}', jobName)
                             ]
                         });
+
+                        emitNet('mrp:employment:server:employmentChanged', source, result);
 
                         let allChars = MRP_SERVER.getSpawnedCharacters();
                         for (let src in allChars) {
