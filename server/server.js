@@ -241,10 +241,25 @@ MRP_SERVER.employment = {
                     }
 
                     needUpdate = true;
-                    data.employment.push({
-                        business: businessId,
-                        role: jobName
-                    });
+                    if (typeof business == 'string') {
+                        //allow multiple jobs for type like "city"
+                        data.employment.push({
+                            business: businessId,
+                            role: jobName
+                        });
+                    } else {
+                        job = MRP_SERVER.employment.findEmployement(data, businessId, null);
+                        if (job) {
+                            //replace previous job role
+                            job.business = businessId;
+                            job.role = jobName;
+                        } else {
+                            data.employment.push({
+                                business: businessId,
+                                role: jobName
+                            });
+                        }
+                    }
                 }
 
                 if (needUpdate) {
