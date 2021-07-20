@@ -132,6 +132,23 @@ onNet('mrp:employment:client:setEmployment', (employment) => {
 });
 
 /**
+ * Update employment data event
+ * @event MRP_CLIENT.employment#mrp:employment:client:update
+ * @type {object}
+ */
+on('mrp:employment:client:update', () => {
+    let char = MRP_CLIENT.GetPlayerData();
+    if (char) {
+        //try to get employment
+        MRP_CLIENT.TriggerServerCallback('mrp:employment:server:getEmployment', char._id, (employment) => {
+            if (employment) {
+                currentEmployment = employment;
+            }
+        });
+    }
+});
+
+/**
  * Get shared object
  * @event MRP_CLIENT.employment#mrp:employment:getSharedObject
  * @type {object}
