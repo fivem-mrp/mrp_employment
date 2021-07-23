@@ -85,11 +85,61 @@ MRP_CLIENT.employment = {
 
     /**
      * getEmployment - description    
-     *      
+     * 
+     * @memberof MRP_CLIENT.employment
      * @return {type}  description     
      */
     getEmployment() {
         return currentEmployment;
+    },
+
+    /**
+     * getRole - description    
+     *      
+     * @memberof MRP_CLIENT.employment
+     * @param  {type} business description     
+     * @param  {type} role     description     
+     * @return {type}          description     
+     */
+    getRole(business, role) {
+        let foundRole = undefined;
+
+        if (currentEmployment && currentEmployment.businessRefs) {
+            for (let business of currentEmployment.businessRefs) {
+                if (utils.isObjectIDEqual(business._id, business) && business.roles) {
+                    for (let r of business.roles) {
+                        if (r.name == role) {
+                            foundRole = r;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return foundRole;
+    },
+
+    /**
+     * getBusiness - description    
+     * 
+     * @memberof MRP_CLIENT.employment
+     * @param  {type} business description     
+     * @return {type}          description     
+     */
+    getBusiness(business) {
+        let foundBusiness = undefined;
+
+        if (currentEmployment && currentEmployment.businessRefs) {
+            for (let business of currentEmployment.businessRefs) {
+                if (utils.isObjectIDEqual(business._id, business)) {
+                    foundBusiness = r;
+                    break;
+                }
+            }
+        }
+
+        return foundRole;
     }
 };
 
