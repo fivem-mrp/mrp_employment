@@ -105,15 +105,10 @@ MRP_CLIENT.employment = {
         let foundRole = undefined;
 
         if (currentEmployment && currentEmployment.businessRefs) {
-            console.log("1");
             for (let b of currentEmployment.businessRefs) {
-                console.log("2");
                 if (utils.isObjectIDEqual(b._id, business) && b.roles) {
-                    console.log("3");
                     for (let r of b.roles) {
-                        console.log("4");
                         if (r.name == role) {
-                            console.log("5");
                             foundRole = r;
                             break;
                         }
@@ -136,9 +131,9 @@ MRP_CLIENT.employment = {
         let foundBusiness = undefined;
 
         if (currentEmployment && currentEmployment.businessRefs) {
-            for (let business of currentEmployment.businessRefs) {
-                if (utils.isObjectIDEqual(business._id, business)) {
-                    foundBusiness = r;
+            for (let b of currentEmployment.businessRefs) {
+                if (utils.isObjectIDEqual(b._id, business)) {
+                    foundBusiness = b;
                     break;
                 }
             }
